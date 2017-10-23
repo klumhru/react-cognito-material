@@ -12,6 +12,7 @@ export const COGNITO_LOGIN_FAILURE = 'COGNITO_LOGIN_FAILURE'
 export const COGNITO_SIGNOUT = 'COGNITO_SIGNOUT'
 export const COGNITO_SIGNOUT_FAILURE = 'COGNITO_SIGNOUT_FAILURE'
 export const COGNITO_SIGNOUT_SUCCESS = 'COGNITO_SIGNOUT_SUCCESS'
+export const COGNITO_ERROR = 'COGNITO_ERROR'
 
 export const cognitoConfigure = ({ UserPoolId, ClientId }) => ({
   type: COGNITO_CONFIGURE,
@@ -35,9 +36,10 @@ export const cognitoRegisterFailure = (error) => ({
   error,
 })
 
-export const cognitoLoginSuccess = (credentials) => ({
+export const cognitoLoginSuccess = (credentials, user) => ({
   type: COGNITO_LOGIN_SUCCESS,
   credentials,
+  user,
 })
 
 export const cognitoLoginFailure = (error) => ({
@@ -78,5 +80,10 @@ export const cognitoSignOutSuccess = () => ({
 
 export const cognitoSignOutFailure = (error) => ({
   type: COGNITO_SIGNOUT_FAILURE,
+  error,
+})
+
+export const cognitoError = (error) => ({
+  type: COGNITO_ERROR,
   error,
 })

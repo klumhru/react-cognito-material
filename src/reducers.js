@@ -48,10 +48,6 @@ export default (state = cognitoStateInit, action) => {
     case actions.COGNITO_REGISTERING: {
       return {
         ...state,
-        data: {
-          email: action.email,
-          password: action.password,
-        },
         registering: true,
         registered: false,
       }
@@ -106,6 +102,12 @@ export default (state = cognitoStateInit, action) => {
     }
     default: {
       return state
+    }
+    case actions.COGNITO_ERROR: {
+      return {
+        ...state,
+        error,
+      }
     }
   }
 }

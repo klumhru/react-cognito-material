@@ -9,6 +9,22 @@ export default (config, {
 }) => {
   const userPool = new CognitoUserPool(config)
   let cognitoUser
+  const putAttributes = (store, creds, user) => {
+    user.getUserAttributes((err, res) => {
+      if (err) {
+        return store.dispatch(actions.cognitoError(err))
+      }
+      let i
+      const user = {}
+      for (i = 0; i < res.length; i++) {
+        user[res[i].getName()] = res[i].getValue()
+      }
+      store.dispatch(actions.cognitoLoginSuccess(creds, user))
+      if (onSigninSuccess !== undefined) {
+        store.dispatch(onSigninSuccess())
+      }
+    })
+  }
 
   return (store) => (next) => (action) => {
     switch (action.type) {
@@ -57,11 +73,7 @@ export default (config, {
                   result.getIdToken().getJwtToken(),
               },
             })
-
-            store.dispatch(actions.cognitoLoginSuccess(AWS.config.credentials))
-            if (onSigninSuccess !== undefined) {
-              store.dispatch(onSigninSuccess())
-            }
+            putAttributes(store, AWS.config.credentials, user)
           },
           onFailure: (error) => store.dispatch(actions.cognitoLoginFailure(error)),
         })
@@ -84,10 +96,7 @@ export default (config, {
                 session.getIdToken().getJwtToken(),
               },
             })
-            store.dispatch(actions.cognitoLoginSuccess(AWS.config.credentials))
-            if (onSigninSuccess !== undefined) {
-              store.dispatch(onSigninSuccess())
-            }
+            putAttributes(store, AWS.config.credentials, cognitoUser)
           })
         }
         break

@@ -12,6 +12,7 @@ import { FormStyle } from './style'
 
 class ResetPasswordForm extends React.Component {
   state = {
+    password: '',
     password1: '',
     password2: '',
   }
@@ -21,7 +22,6 @@ class ResetPasswordForm extends React.Component {
     })
   }
   handleReset = () => {
-    console.debug('handleReset', this.state)
     this.props.handleReset(this.state)
   }
   render() {
@@ -34,6 +34,16 @@ class ResetPasswordForm extends React.Component {
         <CardContent>
           <VerticalForm>
             <TextField
+              id="password"
+              type="password"
+              label="Old password"
+              className={classes.textField}
+              value={this.state.password}
+              onChange={this.handleChange('password')}
+              margin="normal"
+              fullWidth
+            />
+            <TextField
               id="password1"
               type="password"
               label="New password"
@@ -41,6 +51,7 @@ class ResetPasswordForm extends React.Component {
               value={this.state.password}
               onChange={this.handleChange('password1')}
               margin="normal"
+              fullWidth
             />
             <TextField
               id="password2"
@@ -50,6 +61,7 @@ class ResetPasswordForm extends React.Component {
               value={this.state.password2}
               onChange={this.handleChange('password2')}
               margin="normal"
+              fullWidth
             />
           </VerticalForm>
         </CardContent>
