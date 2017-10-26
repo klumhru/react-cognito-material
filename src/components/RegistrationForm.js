@@ -27,12 +27,11 @@ class RegistrationForm extends React.Component {
     })
   }
   handleRegister = () => {
-    console.debug('handleRegister', this.state)
+    console.log('handleRegister', this.state)
     const data = {
       ...this.state,
       password: this.state.password1,
     }
-    this.props.handleRegister(data)
   }
   validForm = () => (
     this.state.password1.length !== 0 &&
@@ -52,14 +51,19 @@ class RegistrationForm extends React.Component {
     )
   )
   render() {
-    const { classes } = this.props
-    console.log('this.props', this.props)
+    const {
+      classes,
+      error,
+      registering,
+      registered,
+    } = this.props
+    console.log(error.name)
     return (
       <Card className={classes.authForm}>
         <CardHeader
           title="Registration"
         />
-        { this.props.registered ?
+        { registered ?
           <CardContent>
             <Typography component="h2" type="headline" gutterBottom>
               Email sent
@@ -77,11 +81,11 @@ class RegistrationForm extends React.Component {
                 className={classes.textField}
                 value={this.state.name}
                 onChange={this.handleChange('name')}
-                disabled={this.props.registering}
+                disabled={registering}
                 margin="normal"
-                error={!this.validName() || (!!this.props.error.name && this.props.error.name.length > 0)}
+                error={!this.validName() || (!!error.name && error.name.length > 0)}
                 fullWidth
-                helperText={this.props.error.name}
+                helperText={error.name}
               />
               <TextField
                 id="email"
@@ -89,11 +93,11 @@ class RegistrationForm extends React.Component {
                 className={classes.textField}
                 value={this.state.email}
                 onChange={this.handleChange('email')}
-                disabled={this.props.registering}
+                disabled={registering}
                 margin="normal"
-                error={!this.validEmail() || (!!this.props.error.email && this.props.error.email.length > 0)}
+                error={!this.validEmail() || (!!error.email && error.email.length > 0)}
                 fullWidth
-                helperText={this.props.error.email}
+                helperText={error.email}
               />
               <TextField
                 id="password1"
@@ -102,11 +106,11 @@ class RegistrationForm extends React.Component {
                 className={classes.textField}
                 value={this.state.password}
                 onChange={this.handleChange('password1')}
-                disabled={this.props.registering}
+                disabled={registering}
                 margin="normal"
-                error={!this.validPassword1() || (!!this.props.error.password && this.props.error.password.length > 0)}
+                error={!this.validPassword1() || (!!error.password && error.password.length > 0)}
                 fullWidth
-                helperText={this.props.error.password}
+                helperText={error.password}
               />
               <TextField
                 id="password2"
@@ -115,23 +119,23 @@ class RegistrationForm extends React.Component {
                 className={classes.textField}
                 value={this.state.password2}
                 onChange={this.handleChange('password2')}
-                disabled={this.props.registering}
+                disabled={registering}
                 margin="normal"
-                error={!this.validPassword2() || (!!this.props.error.password && this.props.error.password.length > 0)}
+                error={!this.validPassword2() || (!!error.password && error.password.length > 0)}
                 fullWidth
-                helperText={this.props.error.password}
+                helperText={error.password}
               />
             </VerticalForm>
           </CardContent>
         }
-        { !this.props.registered &&
+        { !registered &&
           <CardActions>
             <Grid container direction="row" justify="space-around">
               <Button
                 raised
                 disabled={
                   !this.validForm() ||
-                  this.props.registering
+                  registering
                 }
                 color="primary"
                 onClick={this.handleRegister}
@@ -170,7 +174,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({ // eslint-disable-line
-  handleRegister: (userFactory, data) => dispatch(cognitoRegister(userFactory, data)),
+  handleRegister: (data) => dispatch(cognitoRegister(data)),
 })
 
 const component = withStyles(FormStyle)(RegistrationForm)

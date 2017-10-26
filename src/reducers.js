@@ -3,8 +3,6 @@ import { CognitoUserPool } from 'amazon-cognito-identity-js'
 import * as actions from './actions'
 
 const cognitoStateInit = {
-  poolData: {},
-  userPool: {},
   registering: false,
   registered: false,
   signedIn: false,
@@ -25,13 +23,27 @@ export default (state = cognitoStateInit, action) => {
         signedIn: true,
         user: action.user,
         credentials: action.credentials,
+        session: action.session,
+        identity: action.identity,
       }
     }
     case actions.COGNITO_LOGIN_FAILURE: {
+      const error = {
+        email: '',
+        password: '',
+        name: '',
+      }
+      if (action.error.message && action.error.message.toLowerCase().indexOf('password') > -1) {
+        error.password = action.error.message
+      }
+      if (action.error.message && action.error.message.toLowerCase().indexOf('email') > -1) {
+        error.email = action.error.message
+      }
+      error.message = action.error.message
       return {
         ...state,
         loggingIn: false,
-        error: action.error,
+        error,
       }
     }
     case actions.COGNITO_CONFIGURE: {
@@ -74,6 +86,7 @@ export default (state = cognitoStateInit, action) => {
       const error = {
         email: '',
         password: '',
+        name: '',
       }
       if (action.error.message && action.error.message.toLowerCase().indexOf('password') > -1) {
         error.password = action.error.message
