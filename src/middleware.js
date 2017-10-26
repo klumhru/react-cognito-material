@@ -7,7 +7,7 @@ export default (config) => {
   const userPool = new CognitoUserPool(config)
   let cognitoUser
   let cognitoIdentity
-  const putAttributes = (store, creds, user, session, identity) => {
+  const putAttributes = (store, user, session) => {
     user.getUserAttributes((err, res) => {
       if (err) {
         return store.dispatch(actions.cognitoError(err))
@@ -17,7 +17,7 @@ export default (config) => {
       for (i = 0; i < res.length; i++) {
         user[res[i].getName()] = res[i].getValue()
       }
-      store.dispatch(actions.cognitoLoginSuccess(AWS.config.credentials, user, session, identity))
+      store.dispatch(actions.cognitoLoginSuccess(user, session))
     })
   }
 
@@ -61,15 +61,6 @@ export default (config) => {
         cognitoUser = new CognitoUser(userData)
         cognitoUser.authenticateUser(auth, {
           onSuccess: (result) => {
-            AWS.config.region = userPool.client.config.region
-            cognitoIdentity = new AWS.CognitoIdentity()
-            AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-              IdentityPoolId: userPool.userPoolId,
-              Logins: {
-                [`cognito-idp.${userPool.client.config.region}.amazonaws.com/${userPool.userPoolId}`]:
-                  result.getIdToken().getJwtToken(),
-              },
-            })
             store.dispatch(actions.cognitoRefreshCredentials())
           },
           onFailure: (error) => store.dispatch(actions.cognitoLoginFailure(error)),
@@ -79,48 +70,13 @@ export default (config) => {
       case actions.COGNITO_REFRESH_CREDENTIALS: {
         console.log('COGNITO_REFRESH_CREDENTIALS START')
         cognitoUser = userPool.getCurrentUser()
-        console.log('got cognitoUser:', cognitoUser)
         if (cognitoUser != null) {
           cognitoUser.getSession((err, session) => {
             if (err) {
               return store.dispatch(actions.cognitoLoginFailure(err))
             }
-            AWS.config.region = userPool.client.config.region
-            if (!cognitoIdentity) cognitoIdentity = new AWS.CognitoIdentity()
-
-            AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-              IdentityPoolId: config.IdentityPoolId,
-              // IdentityPoolId: userPool.userPoolId,
-              Logins: {
-                [`cognito-idp.${userPool.client.config.region}.amazonaws.com/${userPool.userPoolId}`]:
-                session.getIdToken().getJwtToken(),
-              },
-            })
-            AWS.config.credentials.refresh((error) => {
-              if (error) {
-                store.dispatch(actions.cognitoLoginFailure(error))
-              }
-              else {
-                console.log('AWS.config.credentials', AWS.config.credentials)
-                const params = AWS.config.credentials.webIdentityCredentials.params
-                cognitoIdentity.getCredentialsForIdentity({
-                  IdentityId: params.IdentityId,
-                  Logins: params.Logins,
-                }, (error, identity) => {
-                  if (error) store.dispatch(actions.cognitoLoginFailure(error))
-                  else {
-                    AWS.config.credentials.get((error) => {
-                      if (error) {
-                        console.log('error calling CredentialsForIdentity.get', error)
-                      } else {
-                        console.log('cognitoIdentity.getCredentialsForIdentity', identity)
-                        putAttributes(store, AWS.config.credentials, cognitoUser, session, identity)
-                      }
-                    })
-                  }
-                })
-              }
-            })
+            console.log('got cognitoUser:', cognitoUser, 'with session:', session)
+            putAttributes(store, cognitoUser, session)
           })
         }
         break

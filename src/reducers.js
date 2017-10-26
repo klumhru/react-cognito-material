@@ -22,9 +22,7 @@ export default (state = cognitoStateInit, action) => {
         loggingIn: false,
         signedIn: true,
         user: action.user,
-        credentials: action.credentials,
         session: action.session,
-        identity: action.identity,
       }
     }
     case actions.COGNITO_LOGIN_FAILURE: {

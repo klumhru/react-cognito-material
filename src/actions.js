@@ -36,12 +36,10 @@ export const cognitoRegisterFailure = (error) => ({
   error,
 })
 
-export const cognitoLoginSuccess = (credentials, user, session, identity) => ({
+export const cognitoLoginSuccess = (user, session) => ({
   type: COGNITO_LOGIN_SUCCESS,
-  credentials,
   user,
   session,
-  identity,
 })
 
 export const cognitoLoginFailure = (error) => ({
