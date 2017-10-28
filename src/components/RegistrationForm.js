@@ -56,6 +56,7 @@ class RegistrationForm extends React.Component {
       error,
       registering,
       registered,
+      dispatch,
     } = this.props
     console.log(error.name)
     return (
@@ -138,7 +139,7 @@ class RegistrationForm extends React.Component {
                   registering
                 }
                 color="primary"
-                onClick={this.handleRegister}
+                onClick={() => dispatch(cognitoRegister(this.state))}
               >
                 Register
               </Button>
@@ -175,6 +176,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({ // eslint-disable-line
   handleRegister: (data) => dispatch(cognitoRegister(data)),
+  dispatch,
 })
 
 const component = withStyles(FormStyle)(RegistrationForm)
