@@ -11,7 +11,7 @@ import Button from 'material-ui/Button'
 import * as valid from './validators'
 import { VerticalForm } from './base'
 import { FormStyle } from './style'
-import { cognitoLogin } from '../actions'
+import { cognitoLogin, cognitoSignout } from '../actions'
 
 class LoginForm extends React.Component {
   state = {
@@ -22,6 +22,9 @@ class LoginForm extends React.Component {
     this.setState({
       [name]: event.target.value,
     })
+  }
+  handleSignout = () => {
+    this.props.handleSignout()
   }
   handleForgot = () => {
     this.props.handleForgot(this.state)
@@ -93,7 +96,9 @@ class LoginForm extends React.Component {
           </div>
           :
           <CardContent>
-            Successfully signed in
+            <Button color="warning" onClick={this.handleSignout}>
+              Sign out
+            </Button>
           </CardContent>
         }
       </Card>
@@ -107,6 +112,7 @@ LoginForm.propTypes = {
   handleLogin: PropTypes.func.isRequired,
   signingIn: PropTypes.bool,
   signedIn: PropTypes.bool,
+  handleSignout: PropTypes.func.isRequired,
   // dispatch: PropTypes.func,
   error: PropTypes.string.isRequired,
 }
@@ -125,8 +131,9 @@ const mapStateToProps = (state, ownProps) => ({ // eslint-disable-line
   error: state.cognito.error ? state.cognito.error.message : '',
 })
 
-const mapDispatchToProps = (dispatch, ownProps) => ({ // eslint-disable-line
+const mapDispatchToProps = (dispatch) => ({
   handleLogin: (data) => dispatch(cognitoLogin(data)),
+  handleSignout: () => dispatch(cognitoSignout()),
   handleForgot: () => {}, // TODO
 })
 
