@@ -7,17 +7,16 @@ export default (config) => {
   const userPool = new CognitoUserPool(config)
   let cognitoUser
   let cognitoIdentity
-  const putAttributes = (store, user, session) => {
+  const putAttributes = (store, user, session, creds) => {
     user.getUserAttributes((err, res) => {
       if (err) {
         return store.dispatch(actions.cognitoError(err))
       }
       let i
-      const user = {}
       for (i = 0; i < res.length; i++) {
         user[res[i].getName()] = res[i].getValue()
       }
-      store.dispatch(actions.cognitoLoginSuccess(user, session))
+      store.dispatch(actions.cognitoLoginSuccess(user, session, creds))
     })
   }
 
@@ -68,15 +67,37 @@ export default (config) => {
         break
       }
       case actions.COGNITO_REFRESH_CREDENTIALS: {
-        console.log('COGNITO_REFRESH_CREDENTIALS START')
         cognitoUser = userPool.getCurrentUser()
         if (cognitoUser != null) {
           cognitoUser.getSession((err, session) => {
             if (err) {
               return store.dispatch(actions.cognitoLoginFailure(err))
             }
-            console.log('got cognitoUser:', cognitoUser, 'with session:', session)
-            putAttributes(store, cognitoUser, session)
+            AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+              IdentityPoolId: config.IdentityPoolId,
+              // IdentityPoolId: userPool.userPoolId,
+              RoleArn: 'arn:aws:iam::900405128730:role/Cognito_StarligthTestingAuth_Role',
+              Logins: {
+                [`cognito-idp.${userPool.client.config.region}.amazonaws.com/${userPool.userPoolId}`]:
+                session.getIdToken().getJwtToken(),
+              },
+            })
+            AWS.config.region = 'eu-west-1'
+            AWS.config.credentials.refresh((error) => {
+              if (error) {
+                store.dispatch(actions.cognitoLoginFailure(error))
+              }
+              else {
+                const data = AWS.config.credentials.data.Credentials
+                cognitoUser.identityId = AWS.config.credentials.params.IdentityId
+                const creds = {
+                  accessKeyId: data.AccessKeyId,
+                  secretAccessKey: data.SecretAccessKey,
+                  sessionToken: data.SessionToken,
+                }
+                putAttributes(store, cognitoUser, session, creds)
+              }
+            })
           })
         }
         break
