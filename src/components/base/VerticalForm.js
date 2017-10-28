@@ -15,7 +15,9 @@ const VerticalForm = (props) => {
       justify="center"
       direction="column"
     >
-      {children}
+      <form>
+        {children}
+      </form>
     </Grid>
   )
 }
