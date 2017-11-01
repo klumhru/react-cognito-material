@@ -1,4 +1,5 @@
 import AWS from 'aws-sdk/global'
+import { Lambda } from 'aws-sdk'
 import { AuthenticationDetails, CognitoUser, CognitoUserPool } from 'amazon-cognito-identity-js'
 
 import * as actions from './actions'
@@ -73,31 +74,35 @@ export default (config) => {
             if (err) {
               return store.dispatch(actions.cognitoLoginFailure(err))
             }
-            AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-              IdentityPoolId: config.IdentityPoolId,
-              // IdentityPoolId: userPool.userPoolId,
-              RoleArn: 'arn:aws:iam::900405128730:role/Cognito_StarligthTestingAuth_Role',
-              Logins: {
-                [`cognito-idp.${userPool.client.config.region}.amazonaws.com/${userPool.userPoolId}`]:
-                session.getIdToken().getJwtToken(),
-              },
-            })
-            AWS.config.region = 'eu-west-1'
-            AWS.config.credentials.refresh((error) => {
-              if (error) {
-                store.dispatch(actions.cognitoLoginFailure(error))
-              }
-              else {
-                const data = AWS.config.credentials.data.Credentials
-                cognitoUser.identityId = AWS.config.credentials.params.IdentityId
-                const creds = {
-                  accessKeyId: data.AccessKeyId,
-                  secretAccessKey: data.SecretAccessKey,
-                  sessionToken: data.SessionToken,
+            if (!!config.RetrieveCredentials) {
+              AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+                IdentityPoolId: config.IdentityPoolId,
+                RoleArn: config.AuthRoleArn,
+                Logins: {
+                  [`cognito-idp.${userPool.client.config.region}.amazonaws.com/${userPool.userPoolId}`]:
+                  session.getIdToken().getJwtToken(),
+                },
+              })
+              AWS.config.region = 'eu-west-1'
+              AWS.config.credentials.refresh((error) => {
+                if (error) {
+                  store.dispatch(actions.cognitoLoginFailure(error))
                 }
-                putAttributes(store, cognitoUser, session, creds)
-              }
-            })
+                else {
+                  const data = AWS.config.credentials.data.Credentials
+                  console.log(data)
+                  cognitoUser.identityId = AWS.config.credentials.params.IdentityId
+                  const creds = {
+                    accessKeyId: data.AccessKeyId,
+                    secretAccessKey: data.SecretKey,
+                    sessionToken: data.SessionToken,
+                  }
+                  putAttributes(store, cognitoUser, session, creds)
+                }
+              })
+            } else {
+              putAttributes(store, cognitoUser, session)
+            }
           })
         }
         break

@@ -96,7 +96,7 @@ class LoginForm extends React.Component {
           </div>
           :
           <CardContent>
-            <Button color="warning" onClick={this.handleSignout}>
+            <Button color="accent" raised onClick={this.handleSignout}>
               Sign out
             </Button>
           </CardContent>
