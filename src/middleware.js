@@ -90,11 +90,10 @@ export default (config) => {
                 }
                 else {
                   const data = AWS.config.credentials.data.Credentials
-                  console.log(data)
                   cognitoUser.identityId = AWS.config.credentials.params.IdentityId
                   const creds = {
                     accessKeyId: data.AccessKeyId,
-                    secretAccessKey: data.SecretKey,
+                    secretAccessKey: data.SecretAccessKey || data.SecretKey,
                     sessionToken: data.SessionToken,
                   }
                   putAttributes(store, cognitoUser, session, creds)
