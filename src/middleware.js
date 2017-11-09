@@ -101,6 +101,7 @@ export default (config) => {
                     accessKeyId: data.AccessKeyId,
                     secretAccessKey: data.SecretAccessKey || data.SecretKey,
                     sessionToken: data.SessionToken,
+                    expiration: data.Expiration,
                   }
                   return putAttributes(store, cognitoUser, session, creds)
                 }
