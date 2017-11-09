@@ -8,6 +8,7 @@ export const COGNITO_REGISTERED = 'COGNITO_REGISTERED'
 export const COGNITO_REGISTERING = 'COGNITO_REGISTERING'
 export const COGNITO_REGISTER_SUCCESS = 'COGNITO_REGISTER_SUCCESS'
 export const COGNITO_REGISTER_FAILURE = 'COGNITO_REGISTER_FAILURE'
+export const COGNITO_START = 'COGNITO_START'
 export const COGNITO_REFRESH_CREDENTIALS = 'COGNITO_REFRESH_CREDENTIALS'
 export const COGNITO_LOGIN = 'COGNITO_LOGIN'
 export const COGNITO_LOGGING_IN = 'COGNITO_LOGGING_IN'
@@ -22,6 +23,10 @@ export const cognitoConfigure = ({ UserPoolId, ClientId }) => ({
   type: COGNITO_CONFIGURE,
   UserPoolId,
   ClientId,
+})
+
+export const cognitoStart = () => ({
+  type: COGNITO_START,
 })
 
 export const cognitoRegistering = ({ email, password }) => ({
@@ -52,10 +57,8 @@ export const cognitoLoginFailure = (error) => ({
   error,
 })
 
-export const cognitoLoggingIn = ({ email, password }) => ({
+export const cognitoLoggingIn = () => ({
   type: COGNITO_LOGGING_IN,
-  email,
-  password,
 })
 
 export const cognitoLogin = ({ email, password }) => ({

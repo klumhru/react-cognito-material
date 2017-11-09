@@ -5,6 +5,7 @@ import * as actions from './actions'
 const cognitoStateInit = {
   registering: false,
   registered: false,
+  signingIn: false,
   signedIn: false,
 }
 
@@ -13,13 +14,19 @@ export default (state = cognitoStateInit, action) => {
     case actions.COGNITO_LOGGING_IN: {
       return {
         ...state,
-        loggingIn: true,
+        signingIn: true,
+      }
+    }
+    case actions.COGNITO_REFRESH_CREDENTIALS: {
+      return {
+        ...state,
+        signingIn: true,
       }
     }
     case actions.COGNITO_LOGIN_SUCCESS: {
       return {
         ...state,
-        loggingIn: false,
+        signingIn: false,
         signedIn: true,
         user: action.user,
         session: action.session,
@@ -41,7 +48,7 @@ export default (state = cognitoStateInit, action) => {
       error.message = action.error.message
       return {
         ...state,
-        loggingIn: false,
+        signingIn: false,
         error,
       }
     }
@@ -112,14 +119,14 @@ export default (state = cognitoStateInit, action) => {
         userPool: state.userPool,
       }
     }
-    default: {
-      return state
-    }
     case actions.COGNITO_ERROR: {
       return {
         ...state,
-        error,
+        error: action.error,
       }
+    }
+    default: {
+      return state
     }
   }
 }
