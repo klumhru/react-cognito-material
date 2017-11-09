@@ -1,5 +1,4 @@
 import AWS from 'aws-sdk/global'
-import { Lambda } from 'aws-sdk'
 import { AuthenticationDetails, CognitoUser, CognitoUserPool } from 'amazon-cognito-identity-js'
 
 import * as actions from './actions'
@@ -7,17 +6,18 @@ import * as actions from './actions'
 export default (config) => {
   const userPool = new CognitoUserPool(config)
   let cognitoUser
-  let cognitoIdentity
   const putAttributes = (store, user, session, creds) => {
+    const userWithAttributes = { ...user }
     user.getUserAttributes((err, res) => {
       if (err) {
         return store.dispatch(actions.cognitoError(err))
       }
       let i
       for (i = 0; i < res.length; i++) {
-        user[res[i].getName()] = res[i].getValue()
+        userWithAttributes[res[i].getName()] = res[i].getValue()
       }
-      store.dispatch(actions.cognitoLoginSuccess(user, session, creds))
+
+      return store.dispatch(actions.cognitoLoginSuccess(userWithAttributes, session, creds))
     })
   }
 
@@ -41,8 +41,8 @@ export default (config) => {
       case actions.COGNITO_REGISTER: {
         const { name, email, password } = action
         const attributes = [
-          { Name: "name", Value: name },
-          { Name: "email", Value: email },
+          { Name: 'name', Value: name },
+          { Name: 'email', Value: email },
         ]
         store.dispatch(actions.cognitoRegistering({ email, password }))
         userPool.signUp(email, password, attributes, null, (err, result) => {
@@ -55,16 +55,23 @@ export default (config) => {
       }
       case actions.COGNITO_LOGIN: {
         const { email, password } = action
-        store.dispatch(actions.cognitoLoggingIn({ email, password }))
+        store.dispatch(actions.cognitoLoggingIn())
         const auth = new AuthenticationDetails({ Username: email, Password: password })
         const userData = { Username: email, Pool: userPool }
         cognitoUser = new CognitoUser(userData)
         cognitoUser.authenticateUser(auth, {
-          onSuccess: (result) => {
+          onSuccess: () => {
             store.dispatch(actions.cognitoRefreshCredentials())
           },
           onFailure: (error) => store.dispatch(actions.cognitoLoginFailure(error)),
         })
+        break
+      }
+      case actions.COGNITO_START: {
+        cognitoUser = userPool.getCurrentUser()
+        if (cognitoUser != null) {
+          return store.dispatch(actions.cognitoRefreshCredentials())
+        }
         break
       }
       case actions.COGNITO_REFRESH_CREDENTIALS: {
@@ -87,8 +94,7 @@ export default (config) => {
               AWS.config.credentials.refresh((error) => {
                 if (error) {
                   store.dispatch(actions.cognitoLoginFailure(error))
-                }
-                else {
+                } else {
                   const data = AWS.config.credentials.data.Credentials
                   cognitoUser.identityId = AWS.config.credentials.params.IdentityId
                   const creds = {
@@ -103,6 +109,8 @@ export default (config) => {
               putAttributes(store, cognitoUser, session)
             }
           })
+        } else {
+          return store.dispatch(actions.cognitoSignout())
         }
         break
       }
