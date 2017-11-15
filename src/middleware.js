@@ -59,7 +59,11 @@ export default (config) => {
         const cognitoUser = userPool.getCurrentUser()
         stopRefreshInterval()
         try {
-          cognitoUser.signOut()
+          if (action.signoutFromEverywhere) {
+            cognitoUser.signoutFromEverywhere()
+          } else {
+            cognitoUser.signOut()
+          }
           AWS.config.credentials.clearCachedId()
         } catch (e) {
           store.dispatch(actions.cognitoSignOutFailure(e))

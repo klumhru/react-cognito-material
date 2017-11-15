@@ -73,8 +73,9 @@ export const cognitoRefreshCredentials = () => ({
   type: COGNITO_REFRESH_CREDENTIALS,
 })
 
-export const cognitoSignout = () => ({
+export const cognitoSignout = (signoutFromEverywhere = false) => ({
   type: COGNITO_SIGNOUT,
+  signoutFromEverywhere,
 })
 
 export const cognitoSignOutSuccess = () => ({

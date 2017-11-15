@@ -6,6 +6,7 @@ import RecoverPasswordForm from './RecoverPasswordForm'
 import RegistrationForm from './RegistrationForm'
 import ResetPasswordForm from './ResetPasswordForm'
 import UserProfileForm from './UserProfileForm'
+import UserProfileActions from './UserProfileActions'
 import VerifyEmailForm from './VerifyEmailForm'
 
 export {
@@ -17,5 +18,6 @@ export {
   RegistrationForm,
   ResetPasswordForm,
   UserProfileForm,
+  UserProfileActions,
   VerifyEmailForm,
 }
