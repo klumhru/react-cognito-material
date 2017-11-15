@@ -49,57 +49,57 @@ class LoginForm extends React.Component {
         />
         {
           !this.props.signedIn ?
-          <div>
-            <CardContent>
-              <VerticalForm>
-                <TextField
-                  id="email"
-                  label="Email"
-                  className={classes.textField}
-                  value={this.state.email}
-                  onChange={this.handleChange('email')}
-                  error={!this.validEmail()}
-                  margin="normal"
-                  disabled={this.props.signingIn}
-                  fullWidth
-                />
-                <TextField
-                  id="password"
-                  type="password"
-                  label="Password"
-                  className={classes.textField}
-                  value={this.state.password}
-                  onChange={this.handleChange('password')}
-                  margin="normal"
-                  error={!this.validPassword() || (!!this.props.error && this.props.error.length !== 0)}
-                  disabled={this.props.signingIn}
-                  fullWidth
-                  helperText={this.props.error}
-                />
-              </VerticalForm>
-            </CardContent>
-            <CardActions>
-              <Grid container direction="row" justify="space-around">
-                <Button color="accent" onClick={this.handleForgot}>
+            <div>
+              <CardContent>
+                <VerticalForm>
+                  <TextField
+                    id="email"
+                    label="Email"
+                    className={classes.textField}
+                    value={this.state.email}
+                    onChange={this.handleChange('email')}
+                    error={!this.validEmail()}
+                    margin="normal"
+                    disabled={this.props.signingIn}
+                    fullWidth
+                  />
+                  <TextField
+                    id="password"
+                    type="password"
+                    label="Password"
+                    className={classes.textField}
+                    value={this.state.password}
+                    onChange={this.handleChange('password')}
+                    margin="normal"
+                    error={!this.validPassword() || (!!this.props.error && this.props.error.length !== 0)}
+                    disabled={this.props.signingIn}
+                    fullWidth
+                    helperText={this.props.error}
+                  />
+                </VerticalForm>
+              </CardContent>
+              <CardActions>
+                <Grid container direction="row" justify="space-around">
+                  <Button color="accent" onClick={this.handleForgot}>
                   Forgot?
-                </Button>
-                <Button
-                  raised
-                  color="primary"
-                  onClick={() => this.handleLogin()}
-                  disabled={!this.validForm()}
-                >
+                  </Button>
+                  <Button
+                    raised
+                    color="primary"
+                    onClick={() => this.handleLogin()}
+                    disabled={!this.validForm()}
+                  >
                   Login
-                </Button>
-              </Grid>
-            </CardActions>
-          </div>
+                  </Button>
+                </Grid>
+              </CardActions>
+            </div>
           :
-          <CardContent>
-            <Button color="accent" raised onClick={this.handleSignout}>
+            <CardContent>
+              <Button color="accent" raised onClick={this.handleSignout}>
               Sign out
-            </Button>
-          </CardContent>
+              </Button>
+            </CardContent>
         }
       </Card>
     )

@@ -10,11 +10,12 @@
   },
   "dependencies": {
     "amazon-cognito-auth-js": "^1.0.0",
-    "amazon-cognito-identity-js": "^1.21.0",
-    "aws-sdk": "^2.133.0",
+    "amazon-cognito-identity-js": "^1.25.0",
+    "aws-sdk": "^2.150.0",
     "jest": "^20.0.4",
     "jss": "^8.1.0",
-    "material-ui": "^1.0.0-beta.17",
+    "material-ui": "^1.0.0-beta.21",
+    "prop-types": "^15.6.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.2",
     "react-redux": "^5.0.6",
@@ -43,7 +44,9 @@
       "window": true
     },
     "rules": {
-      "object-curly-newline": [0],
+      "object-curly-newline": [
+        0
+      ],
       "no-plusplus": 0,
       "no-console": 0,
       "no-confusing-arrow": [
@@ -127,12 +130,12 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
-    "babel-eslint": "^8.0.1",
+    "babel-eslint": "^8.0.2",
     "babel-jest": "^21.2.0",
     "babel-loader": "^7.1.2",
     "babel-preset-react-app": "^3.1.0",
     "babel-runtime": "^6.26.0",
-    "eslint": "^4.10.0",
+    "eslint": "^4.11.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
