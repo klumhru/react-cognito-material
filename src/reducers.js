@@ -11,7 +11,7 @@ const cognitoStateInit = {
 
 export default (state = cognitoStateInit, action) => {
   switch (action.type) {
-    case actions.COGNITO_LOGGING_IN: {
+    case actions.COGNITO_LOGIN: {
       return {
         ...state,
         signingIn: true,
