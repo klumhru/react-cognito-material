@@ -3,40 +3,45 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import Typography from 'material-ui/Typography'
-import Icon from 'material-ui/Icon'
-import Tooltip from 'material-ui/Tooltip'
 import Card, { CardHeader, CardContent, CardActions } from 'material-ui/Card'
 import { withStyles } from 'material-ui/styles'
 import { FormStyle } from './style'
+import { cognitoUserAttributes } from '../actions'
 import { UserProfileActions } from '.'
 
-const UserProfileForm = (props) => {
-  const { classes, signedIn, user } = props
-  return (
-    <Card className={classes.authForm}>
-      {
+class UserProfileForm extends React.Component {
+  componentDidMount = () => {
+    this.props.dispatch(cognitoUserAttributes())
+  }
+  render() {
+    const {
+      classes,
+      signedIn,
+    } = this.props
+    const userAttributes = this.props.userAttributes
+      .filter((attribute) =>
+        this.props.userProfileAttributes.includes(attribute.getName()))
+    return (
+      <Card className={classes.authForm}>
+        {
         signedIn ?
           <div>
             <CardHeader
               title="Profile"
             />
-            <CardContent>
-              <Typography>{ user.name }</Typography>
-              <Typography>
-                { user.email } { user.email_verified ?
-                  <Tooltip id="tooltip-top-end" title="Verified" placement="top">
-                    <Icon className={classes.verifyEmailIcon}>done
-                    </Icon>
-                  </Tooltip> :
-                  <Tooltip id="tooltip-top-end" title="Not verified" placement="top">
-                    <Icon className={classes.verifyEmailIcon}>error_outline
-                    </Icon>
-                  </Tooltip>
+            { userAttributes != null ?
+              <CardContent>
+                { userAttributes.map((attribute) =>
+                  <Typography>{ attribute.getValue() }</Typography>)
                 }
-              </Typography>
-            </CardContent>
+              </CardContent>
+            :
+              <CardContent>
+                Loading...
+              </CardContent>
+            }
             <CardActions>
-              <UserProfileActions user={user} />
+              <UserProfileActions />
             </CardActions>
           </div>
         :
@@ -49,29 +54,33 @@ const UserProfileForm = (props) => {
             </CardContent>
           </div>
       }
-    </Card>
-  )
+      </Card>
+    )
+  }
 }
 
 UserProfileForm.propTypes = {
   classes: PropTypes.object.isRequired,
   signedIn: PropTypes.bool,
-  user: PropTypes.object.isRequired,
+  userAttributes: PropTypes.array,
+  userProfileAttributes: PropTypes.array,
+  dispatch: PropTypes.func.isRequired,
 }
 
 UserProfileForm.defaultProps = {
   signedIn: false,
+  userAttributes: [],
+  userProfileAttributes: [],
 }
 
 const component = withStyles(FormStyle)(UserProfileForm)
 
 const mapStateToProps = (state, ownProps) => ({ // eslint-disable-line
   signedIn: state.cognito.signedIn,
-  user: state.cognito.user,
+  userAttributes: state.cognito.userAttributes,
+  userProfileAttributes: state.cognito.userProfileAttributes,
 })
 
-const mapDispatchToProps = (dispatch, ownProps) => ({ // eslint-disable-line
-  dispatch,
-})
+const mapDispatchToProps = (dispatch) => ({ dispatch })
 
 export default connect(mapStateToProps, mapDispatchToProps)(component)

@@ -33,11 +33,8 @@ UserProfileActions.defaultProps = {
 
 const component = withStyles(FormStyle)(UserProfileActions)
 
-const mapStateToProps = (state, ownProps) => ({ // eslint-disable-line
-})
-
 const mapDispatchToProps = (dispatch) => ({
   handleSignout: () => dispatch(cognitoSignout(true)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(component)
+export default connect(mapDispatchToProps)(component)

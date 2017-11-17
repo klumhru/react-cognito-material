@@ -5,6 +5,7 @@ import * as actions from './actions'
 
 export default (config) => {
   const userPool = new CognitoUserPool(config)
+  let cognitoUser = userPool.getCurrentUser()
   let refreshIntervalTimer
 
   const stopRefreshInterval = () => {
@@ -17,16 +18,13 @@ export default (config) => {
       store.dispatch(actions.cognitoRefreshCredentials())
     }, config.RefreshSessionIntervalSeconds * 1000 || 1000 * 60 * 15)
   }
-  const putAttributes = (cognitoUser, attributes) => {
-    const user = { ...cognitoUser }
+  const putUserAttributes = (attributes) => {
     let i
     for (i = 0; i < attributes.length; i++) {
-      user[attributes[i].getName()] = attributes[i].getValue()
+      cognitoUser[attributes[i].getName()] = attributes[i].getValue()
     }
-
-    return user
   }
-  const refreshCredentials = (cognitoUser) =>
+  const refreshCredentials = () =>
     new Promise((resolve, reject) => {
       cognitoUser.getSession((err, session) => {
         if (err) {
@@ -53,22 +51,43 @@ export default (config) => {
     })
 
   return (store) => (next) => (action) => {
-    const res = next(action)
     switch (action.type) {
+      case actions.COGNITO_START: {
+        const user = userPool.getCurrentUser()
+        if (user != null) {
+          startRefreshInterval(store)
+          return store.dispatch(actions.cognitoRefreshCredentials())
+        }
+        return false
+      }
+      case actions.COGNITO_USER_ATTRIBUTES: {
+        if (cognitoUser != null) {
+          cognitoUser.getUserAttributes((error, attributes) => {
+            if (error) {
+              store.dispatch(actions.cognitoUserAttributesError(error))
+            } else {
+              store.dispatch(actions.cognitoUserAttributesSuccess(attributes, config.userProfileAttributes || []))
+            }
+          })
+        }
+        break
+      }
       case actions.COGNITO_SIGNOUT: {
-        const cognitoUser = userPool.getCurrentUser()
         stopRefreshInterval()
-        try {
-          if (action.signoutFromEverywhere) {
-            cognitoUser.signoutFromEverywhere()
-          } else {
-            cognitoUser.signOut()
+        if (cognitoUser != null) {
+          try {
+            if (action.signoutFromEverywhere) {
+              cognitoUser.globalSignout()
+            } else {
+              cognitoUser.signOut(() => {
+              })
+            }
+            AWS.config.credentials.clearCachedId()
+          } catch (e) {
+            store.dispatch(actions.cognitoSignOutFailure(e))
+          } finally {
+            store.dispatch(actions.cognitoSignOutSuccess())
           }
-          AWS.config.credentials.clearCachedId()
-        } catch (e) {
-          store.dispatch(actions.cognitoSignOutFailure(e))
-        } finally {
-          store.dispatch(actions.cognitoSignOutSuccess())
         }
         break
       }
@@ -94,7 +113,7 @@ export default (config) => {
         const { email, password } = action
         const auth = new AuthenticationDetails({ Username: email, Password: password })
         const userData = { Username: email, Pool: userPool }
-        const cognitoUser = new CognitoUser(userData)
+        cognitoUser = new CognitoUser(userData)
         cognitoUser.authenticateUser(auth, {
           onSuccess: () => {
             startRefreshInterval(store)
@@ -104,25 +123,15 @@ export default (config) => {
         })
         break
       }
-      case actions.COGNITO_START: {
-        const cognitoUser = userPool.getCurrentUser()
-        if (cognitoUser != null) {
-          // Start interval to refresh the session
-          startRefreshInterval(store)
-          store.dispatch(actions.cognitoRefreshCredentials())
-        }
-        break
-      }
       case actions.COGNITO_REFRESH_CREDENTIALS: {
-        const cognitoUser = userPool.getCurrentUser()
         if (cognitoUser != null) {
           refreshCredentials(cognitoUser).then((session) => {
             cognitoUser.getUserAttributes((error, attributes) => {
               if (error) {
                 store.dispatch(actions.cognitoError(error))
               } else {
-                const user = putAttributes(cognitoUser, attributes)
-                user.identityId = AWS.config.credentials.params.IdentityId
+                putUserAttributes(attributes)
+                cognitoUser.identityId = AWS.config.credentials.params.IdentityId
                 const data = AWS.config.credentials.data.Credentials
                 const creds = {
                   accessKeyId: data.AccessKeyId,
@@ -130,8 +139,7 @@ export default (config) => {
                   sessionToken: data.SessionToken,
                   expiration: data.Expiration,
                 }
-
-                store.dispatch(actions.cognitoLoginSuccess(user, session, creds))
+                store.dispatch(actions.cognitoLoginSuccess(cognitoUser, session, creds))
               }
             })
           }).catch((err) => {
@@ -142,6 +150,6 @@ export default (config) => {
       }
       default: break
     }
-    return res
+    return next(action)
   }
 }
