@@ -3,6 +3,9 @@ export const COGNITO_RESET_PASSWORD_SUCCESS = 'COGNITO_RESET_PASSWORD_SUCCESS'
 export const COGNITO_RESET_PASSWORD_FAILURE = 'COGNITO_RESET_PASSWORD_FAILURE'
 
 export const COGNITO_CONFIGURE = 'COGNITO_CONFIGURE'
+export const COGNITO_USER_ATTRIBUTES = 'COGNITO_USER_ATTRIBUTES'
+export const COGNITO_USER_ATTRIBUTES_SUCCESS = 'COGNITO_USER_ATTRIBUTES_SUCCESS'
+export const COGNITO_USER_ATTRIBUTES_FAILURE = 'COGNITO_USER_ATTRIBUTES_FAILURE'
 export const COGNITO_REGISTER = 'COGNITO_REGISTER'
 export const COGNITO_REGISTERED = 'COGNITO_REGISTERED'
 export const COGNITO_REGISTERING = 'COGNITO_REGISTERING'
@@ -22,6 +25,21 @@ export const cognitoConfigure = ({ UserPoolId, ClientId }) => ({
   type: COGNITO_CONFIGURE,
   UserPoolId,
   ClientId,
+})
+
+export const cognitoUserAttributes = () => ({
+  type: COGNITO_USER_ATTRIBUTES,
+})
+
+export const cognitoUserAttributesSuccess = (attributes, userProfileAttributes) => ({
+  type: COGNITO_USER_ATTRIBUTES_SUCCESS,
+  attributes,
+  userProfileAttributes,
+})
+
+export const cognitoUserAttributesError = (error) => ({
+  type: COGNITO_USER_ATTRIBUTES_FAILURE,
+  error,
 })
 
 export const cognitoRegistering = ({ email, password }) => ({

@@ -23,6 +23,13 @@ export default (state = cognitoStateInit, action) => {
         signingIn: true,
       }
     }
+    case actions.COGNITO_USER_ATTRIBUTES_SUCCESS: {
+      return {
+        ...state,
+        userAttributes: action.attributes,
+        userProfileAttributes: action.userProfileAttributes,
+      }
+    }
     case actions.COGNITO_LOGIN_SUCCESS: {
       return {
         ...state,
