@@ -28,10 +28,6 @@ class RegistrationForm extends React.Component {
   }
   handleRegister = () => {
     console.log('handleRegister', this.state)
-    const data = {
-      ...this.state,
-      password: this.state.password1,
-    }
   }
   validForm = () => (
     this.state.password1.length !== 0 &&
