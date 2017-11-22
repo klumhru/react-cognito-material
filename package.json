@@ -1,6 +1,6 @@
 {
   "name": "react-cognito-material",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "Ties together ReactJS with AWS Cognito identity, using Material UI for styling",
   "license": "MIT",
   "repository": "https://github.com/klumhru/react-cognito-material",
@@ -16,15 +16,13 @@
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "webpack": "^2.6.1",
-    "xregexp": "^3.2.0",
-    "react": "^15.6.1"
+    "xregexp": "^3.2.0"
   },
   "scripts": {
-    "start": "node scripts/start.js",
+    "start": "webpack --watch",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "lint": "node node_modules/eslint/bin/eslint.js src/ -f codeframe",
-    "start": "webpack --watch"
+    "lint": "node node_modules/eslint/bin/eslint.js src/ -f codeframe"
   },
   "author": {
     "name": "Högni Gylfason",
