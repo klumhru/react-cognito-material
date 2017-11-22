@@ -58,7 +58,6 @@ class RegistrationForm extends React.Component {
       registered,
       dispatch,
     } = this.props
-    console.log(error.name)
     return (
       <Card className={classes.authForm}>
         <CardHeader
@@ -153,6 +152,7 @@ class RegistrationForm extends React.Component {
 
 RegistrationForm.propTypes = {
   classes: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
   error: PropTypes.object,
   registering: PropTypes.bool,
   registered: PropTypes.bool,
@@ -179,5 +179,5 @@ const mapDispatchToProps = (dispatch, ownProps) => ({ // eslint-disable-line
   dispatch,
 })
 
-const component = withStyles(FormStyle)(RegistrationForm)
+export const component = withStyles(FormStyle)(RegistrationForm)
 export default connect(mapStateToProps, mapDispatchToProps)(component)

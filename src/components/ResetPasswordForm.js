@@ -13,7 +13,6 @@ import { FormStyle } from './style'
 class ResetPasswordForm extends React.Component {
   state = {
     password: '',
-    password1: '',
     password2: '',
   }
   handleChange = (name) => (event) => {
