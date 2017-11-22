@@ -1,6 +1,6 @@
 {
   "name": "react-cognito-material",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Ties together ReactJS with AWS Cognito identity, using Material UI for styling",
   "license": "MIT",
   "repository": "https://github.com/klumhru/react-cognito-material",
