@@ -1,6 +1,11 @@
+export const COGNITO_SEND_VERIFICATION_CODE = 'COGNITO_SEND_VERIFICATION_CODE'
+export const COGNITO_SEND_VERIFICATION_CODE_SUCCESS = 'COGNITO_SEND_VERIFICATION_CODE_SUCCESS'
+export const COGNITO_SEND_VERIFICATION_CODE_FAILURE = 'COGNITO_SEND_VERIFICATION_CODE_FAILURE'
+
 export const COGNITO_RESET_PASSWORD = 'COGNITO_RESET_PASSWORD'
 export const COGNITO_RESET_PASSWORD_SUCCESS = 'COGNITO_RESET_PASSWORD_SUCCESS'
 export const COGNITO_RESET_PASSWORD_FAILURE = 'COGNITO_RESET_PASSWORD_FAILURE'
+
 
 export const COGNITO_CONFIGURE = 'COGNITO_CONFIGURE'
 export const COGNITO_USER_ATTRIBUTES = 'COGNITO_USER_ATTRIBUTES'
@@ -20,6 +25,35 @@ export const COGNITO_SIGNOUT = 'COGNITO_SIGNOUT'
 export const COGNITO_SIGNOUT_FAILURE = 'COGNITO_SIGNOUT_FAILURE'
 export const COGNITO_SIGNOUT_SUCCESS = 'COGNITO_SIGNOUT_SUCCESS'
 export const COGNITO_ERROR = 'COGNITO_ERROR'
+
+export const cognitoResetPassword = (verificationCode, newPassword) => ({
+  type: COGNITO_RESET_PASSWORD,
+  verificationCode,
+  newPassword,
+})
+
+export const cognitoResetPasswordSuccess = () => ({
+  type: COGNITO_RESET_PASSWORD_SUCCESS,
+})
+
+export const cognitoResetPasswordFailure = (error) => ({
+  type: COGNITO_RESET_PASSWORD_FAILURE,
+  error,
+})
+
+export const cognitoSendVerificationCode = (email) => ({
+  type: COGNITO_SEND_VERIFICATION_CODE,
+  email,
+})
+
+export const cognitoSendVerificationCodeSuccess = () => ({
+  type: COGNITO_SEND_VERIFICATION_CODE_SUCCESS,
+})
+
+export const cognitoSendVerificationCodeFailure = (error) => ({
+  type: COGNITO_SEND_VERIFICATION_CODE_FAILURE,
+  error,
+})
 
 export const cognitoConfigure = ({ UserPoolId, ClientId }) => ({
   type: COGNITO_CONFIGURE,

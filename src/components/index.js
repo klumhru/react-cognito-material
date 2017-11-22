@@ -2,9 +2,8 @@ import LoginForm from './LoginForm'
 import MFAConfirmForm from './MFAConfirmForm'
 import MFARecoveryForm from './MFARecoveryForm'
 import MFASetupForm from './MFASetupForm'
-import RecoverPasswordForm from './RecoverPasswordForm'
 import RegistrationForm from './RegistrationForm'
-import ResetPasswordForm from './ResetPasswordForm'
+import { ResetPasswordForm } from './ResetPassword'
 import UserProfileForm from './UserProfileForm'
 import UserProfileActions from './UserProfileActions'
 import VerifyEmailForm from './VerifyEmailForm'
@@ -14,7 +13,6 @@ export {
   MFAConfirmForm,
   MFARecoveryForm,
   MFASetupForm,
-  RecoverPasswordForm,
   RegistrationForm,
   ResetPasswordForm,
   UserProfileForm,
