@@ -16,13 +16,15 @@
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "webpack": "^2.6.1",
-    "xregexp": "^3.2.0"
+    "xregexp": "^3.2.0",
+    "react": "^15.6.1"
   },
   "scripts": {
-    "start": "webpack --watch",
+    "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "lint": "node node_modules/eslint/bin/eslint.js src/ -f codeframe"
+    "lint": "node node_modules/eslint/bin/eslint.js src/ -f codeframe",
+    "start": "webpack --watch"
   },
   "author": {
     "name": "Högni Gylfason",
@@ -159,7 +161,6 @@
     "fs-extra": "3.0.1",
     "html-webpack-plugin": "2.28.0",
     "jest": "20.0.3",
-    "jss": "^9.3.3",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.0.0",
     "postcss-loader": "2.0.5",
