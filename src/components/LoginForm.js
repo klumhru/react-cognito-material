@@ -123,7 +123,7 @@ LoginForm.defaultProps = {
   signingIn: false,
 }
 
-const component = withStyles(FormStyle)(LoginForm)
+export const component = withStyles(FormStyle)(LoginForm)
 
 const mapStateToProps = (state, ownProps) => ({ // eslint-disable-line
   signingIn: state.cognito.signingIn,

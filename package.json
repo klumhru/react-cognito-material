@@ -12,19 +12,18 @@
     "amazon-cognito-auth-js": "^1.0.0",
     "amazon-cognito-identity-js": "^1.25.0",
     "aws-sdk": "^2.150.0",
-    "jest": "^20.0.4",
-    "jss": "^8.1.0",
     "material-ui": "^1.0.0-beta.21",
     "prop-types": "^15.6.0",
     "react": "^15.6.1",
-    "react-dom": "^15.6.2",
+    "react-dom": "^15.6.1",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "webpack": "^2.6.1",
     "xregexp": "^3.2.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node scripts/test.js --env=jsdom",
+    "coverage": "node scripts/test.js --coverage --env=jsdom --watch",
     "start": "webpack --watch",
     "build": "webpack"
   },
@@ -35,6 +34,15 @@
   },
   "eslintConfig": {
     "parser": "babel-eslint",
+    "overrides": [
+      {
+        "files": [
+          "scripts/**/*.js",
+          "config/**/*.js"
+        ],
+        "excludedFiles": "*.js"
+      }
+    ],
     "extends": "airbnb",
     "env": {
       "jest": true
@@ -135,10 +143,17 @@
     "babel-loader": "^7.1.2",
     "babel-preset-react-app": "^3.1.0",
     "babel-runtime": "^6.26.0",
+    "css-loader": "^0.28.7",
+    "css.escape": "^1.5.1",
+    "enzyme": "^3.2.0",
     "eslint": "^4.11.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
-    "eslint-plugin-react": "^7.4.0"
+    "eslint-plugin-react": "^7.4.0",
+    "file-loader": "^1.1.5",
+    "jest": "^21.2.1",
+    "jss": "^8.1.0",
+    "postcss-loader": "^2.0.8"
   }
 }

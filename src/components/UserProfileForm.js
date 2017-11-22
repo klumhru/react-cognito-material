@@ -73,7 +73,7 @@ UserProfileForm.defaultProps = {
   userProfileAttributes: [],
 }
 
-const component = withStyles(FormStyle)(UserProfileForm)
+export const component = withStyles(FormStyle)(UserProfileForm)
 
 const mapStateToProps = (state, ownProps) => ({ // eslint-disable-line
   signedIn: state.cognito.signedIn,
