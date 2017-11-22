@@ -4,7 +4,9 @@ node_js:
 cache:
   directories:
     - "node_modules"
-after_success: npm run build
+script:
+- npm run build
+- npm test
 deploy:
   skip_cleanup: true
   provider: npm
