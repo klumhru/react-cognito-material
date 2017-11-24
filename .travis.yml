@@ -4,9 +4,6 @@ node_js:
 script:
 - npm run build
 - npm test
-<<<<<<< HEAD
-
-=======
 deploy:
   skip_cleanup: true
   provider: npm
@@ -17,4 +14,3 @@ deploy:
     # tags: true
     all_branches: true
     repo: klumhru/react-cognito-material
->>>>>>> 56e9b35a59f551fd959f0d612587834206637eb0
