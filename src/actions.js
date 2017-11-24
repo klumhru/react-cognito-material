@@ -6,6 +6,7 @@ export const COGNITO_RESET_PASSWORD = 'COGNITO_RESET_PASSWORD'
 export const COGNITO_RESET_PASSWORD_SUCCESS = 'COGNITO_RESET_PASSWORD_SUCCESS'
 export const COGNITO_RESET_PASSWORD_FAILURE = 'COGNITO_RESET_PASSWORD_FAILURE'
 
+export const COGNITO_RESET_PASSWORD_RESTART = 'COGNITO_RESET_PASSWORD_RESTART'
 
 export const COGNITO_CONFIGURE = 'COGNITO_CONFIGURE'
 export const COGNITO_USER_ATTRIBUTES = 'COGNITO_USER_ATTRIBUTES'
@@ -30,6 +31,10 @@ export const cognitoResetPassword = (verificationCode, newPassword) => ({
   type: COGNITO_RESET_PASSWORD,
   verificationCode,
   newPassword,
+})
+
+export const cognitoResetPasswordRestart = () => ({
+  type: COGNITO_RESET_PASSWORD_RESTART,
 })
 
 export const cognitoResetPasswordSuccess = () => ({

@@ -35,18 +35,31 @@ class EnterNewPassword extends React.Component {
   validPassword2 = () =>
     this.state.password2.length === 0
     || valid.password(this.state.password2)
-  validPasswordsMatch = () => this.state.password1 === this.state.password2
+  passwordsMatch = () => this.state.password1 === this.state.password2
+              || this.state.password1.length === 0 || this.state.password2.length === 0
   handleSendVerificationCode = () => {
     this.props.handleSendVerificationCode(this.state.email)
   }
   handleResetPassword = () => {
     this.props.handleResetPassword(this.state.verificationCode, this.state.password2)
   }
+  passwordErrorMessage = () => {
+    if (this.props.resetPasswordError.length > 0) {
+      return this.props.resetPasswordError
+    }
+
+    if (!this.passwordsMatch()) {
+      return 'Passwords do not match'
+    }
+
+    return ''
+  }
   render() {
     const {
       classes,
       resettingPassword,
       passwordResetSuccessful,
+      resetPasswordError,
     } = this.props
 
     if (passwordResetSuccessful) {
@@ -87,10 +100,9 @@ class EnterNewPassword extends React.Component {
             disabled={resettingPassword}
             fullWidth
             error={
-                  !this.validPassword1()
-                  || !this.validPasswordsMatch()
-                  || (!!this.props.resetPasswordError && this.props.resetPasswordError.length !== 0)
-                  }
+              !this.validPassword1()
+                  || !this.passwordsMatch()
+            }
           />
 
           <TextField
@@ -103,11 +115,12 @@ class EnterNewPassword extends React.Component {
             margin="normal"
             disabled={resettingPassword}
             fullWidth
+            helperText={this.passwordErrorMessage()}
             error={
-                  !this.validPassword2()
-                  || !this.validPasswordsMatch()
-                  || (!!this.props.resetPasswordError && this.props.resetPasswordError.length !== 0)
-                  }
+              !this.validPassword2()
+              || !this.passwordsMatch()
+              || (!!resetPasswordError && resetPasswordError.length !== 0)
+            }
           />
 
         </CardContent>
@@ -118,13 +131,19 @@ class EnterNewPassword extends React.Component {
                 raised
                 color="primary"
                 onClick={this.handleResetPassword}
-                disabled={resettingPassword}
+                disabled={
+                  resettingPassword
+                  || !this.validPassword2()
+                  || !this.passwordsMatch()
+                  || this.state.password2.length === 0
+                  || this.state.verificationCode.length === 0
+                }
               >
                 { resettingPassword ?
-                     'Changing password'
-                     :
-                     'Change password'
-                  }
+                  'Changing password'
+                  :
+                  'Change password'
+                }
               </Button>
               { resettingPassword && <CircularProgress size={24} className={classes.buttonProgress} /> }
             </div>
@@ -140,13 +159,14 @@ EnterNewPassword.propTypes = {
   handleSendVerificationCode: PropTypes.func.isRequired,
   handleResetPassword: PropTypes.func.isRequired,
   resettingPassword: PropTypes.bool,
-  resetPasswordError: PropTypes.string.isRequired,
+  resetPasswordError: PropTypes.string,
   passwordResetSuccessful: PropTypes.bool,
 }
 
 EnterNewPassword.defaultProps = {
   resettingPassword: false,
   passwordResetSuccessful: false,
+  resetPasswordError: '',
 }
 
 const component = withStyles(FormStyle)(EnterNewPassword)
@@ -156,7 +176,7 @@ const mapStateToProps = (state) => ({
   verificationCodeSent: state.cognito.verificationCodeSent,
   resettingPassword: state.cognito.resettingPassword,
   passwordResetSuccessful: state.cognito.passwordResetSuccessful,
-  resetPasswordError: state.cognito.resetPasswordError ? state.cognito.resetPasswordError.message : '',
+  resetPasswordError: state.cognito.resetPasswordError,
 })
 
 const mapDispatchToProps = (dispatch) => ({

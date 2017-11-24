@@ -17,10 +17,19 @@ export default (state = cognitoStateInit, action) => {
         signingIn: true,
       }
     }
+    case actions.COGNITO_RESET_PASSWORD_RESTART: {
+      return {
+        ...state,
+        verificationCodeSent: false,
+        sendVerificationCodeError: '',
+        resetPasswordError: '',
+      }
+    }
     case actions.COGNITO_RESET_PASSWORD: {
       return {
         ...state,
         resettingPassword: true,
+        resetPasswordError: '',
       }
     }
     case actions.COGNITO_RESET_PASSWORD_SUCCESS: {
@@ -35,12 +44,14 @@ export default (state = cognitoStateInit, action) => {
         ...state,
         resettingPassword: false,
         passwordResetSuccessful: false,
+        resetPasswordError: action.error.message,
       }
     }
     case actions.COGNITO_SEND_VERIFICATION_CODE: {
       return {
         ...state,
         sendingVerificationCode: true,
+        sendVerificationCodeError: '',
       }
     }
     case actions.COGNITO_SEND_VERIFICATION_CODE_SUCCESS: {
@@ -55,6 +66,7 @@ export default (state = cognitoStateInit, action) => {
         ...state,
         sendingVerificationCode: false,
         verificationCodeSent: false,
+        sendVerificationCodeError: action.error.message,
       }
     }
     case actions.COGNITO_REFRESH_CREDENTIALS: {

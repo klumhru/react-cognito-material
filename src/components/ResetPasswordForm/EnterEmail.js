@@ -32,6 +32,7 @@ class EnterEmail extends React.Component {
     const {
       classes,
       sendingVerificationCode,
+      sendVerificationCodeError,
     } = this.props
     return (
       <div>
@@ -42,11 +43,14 @@ class EnterEmail extends React.Component {
             className={classes.textField}
             value={this.state.email}
             onChange={this.handleChange('email')}
-            error={!this.validEmail()}
+            error={!this.validEmail() || sendVerificationCodeError.length !== 0}
             margin="normal"
             disabled={sendingVerificationCode}
             fullWidth
             type="email"
+            minLength="2"
+            inputProps={{ minLength: '2' }}
+            helperText={sendVerificationCodeError}
           />
         </CardContent>
         <CardActions>
@@ -56,13 +60,13 @@ class EnterEmail extends React.Component {
                 raised
                 color="primary"
                 onClick={this.handleSendVerificationCode}
-                disabled={sendingVerificationCode}
+                disabled={sendingVerificationCode || (this.state.email.length === 0 || !this.validEmail())}
               >
                 { !sendingVerificationCode ?
-                'Send verification code'
-                :
-                'Sending verification code'
-              }
+                  'Send verification code'
+                  :
+                  'Sending verification code'
+                }
               </Button>
               { sendingVerificationCode && <CircularProgress size={24} className={classes.buttonProgress} /> }
             </div>
@@ -77,16 +81,21 @@ EnterEmail.propTypes = {
   classes: PropTypes.object.isRequired,
   handleSendVerificationCode: PropTypes.func.isRequired,
   sendingVerificationCode: PropTypes.bool,
+  sendVerificationCodeError: PropTypes.string,
 }
 
 EnterEmail.defaultProps = {
   sendingVerificationCode: false,
+  handleSendVerificationCode: () => {},
+  handleResetPassword: () => {},
+  sendVerificationCodeError: '',
 }
 
 const component = withStyles(FormStyle)(EnterEmail)
 
 const mapStateToProps = (state) => ({
   sendingVerificationCode: state.cognito.sendingVerificationCode,
+  sendVerificationCodeError: state.cognito.sendVerificationCodeError,
 })
 
 const mapDispatchToProps = (dispatch) => ({

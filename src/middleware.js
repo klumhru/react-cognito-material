@@ -77,13 +77,18 @@ export default (config) => {
           const { verificationCode, newPassword } = action
           cognitoUser.confirmPassword(verificationCode, newPassword, {
             onSuccess: () => {
-              console.log('Password confirmed!')
               store.dispatch(actions.cognitoResetPasswordSuccess())
             },
             onFailure: (err) => {
               store.dispatch(actions.cognitoResetPasswordFailure(err))
             },
           })
+        } else {
+          // TODO: Offer a solution to restart the reset password flow.
+          // Dispatch RESET_PASSWORD_START?
+          setTimeout(() => {
+            store.dispatch(actions.cognitoResetPasswordRestart())
+          }, 50)
         }
         break
       }
@@ -91,12 +96,13 @@ export default (config) => {
         const { email } = action
         cognitoUser = new CognitoUser({ Username: email, Pool: userPool })
         cognitoUser.forgotPassword({
-          onSuccess: (result) => {
-            console.log(result)
-            store.dispatch(actions.cognitoSendVerificationCodeSuccess())
-            console.log('wat')
-          },
+          // onSuccess: (result) => {
+          //   console.log(result)
+          //   store.dispatch(actions.cognitoSendVerificationCodeSuccess())
+          //   console.log('wat')
+          // },
           onFailure: (err) => {
+            console.log(err)
             store.dispatch(actions.cognitoSendVerificationCodeFailure(err))
           },
           inputVerificationCode: () => {
