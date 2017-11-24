@@ -10,7 +10,6 @@ import TextField from 'material-ui/TextField'
 import Grid from 'material-ui/Grid'
 import { CardContent, CardActions } from 'material-ui/Card'
 import Button from 'material-ui/Button'
-import { VerticalForm } from '../base'
 
 import * as valid from '../validators'
 import { FormStyle } from '../style'
@@ -62,54 +61,55 @@ class EnterNewPassword extends React.Component {
     return (
       <div>
         <CardContent>
-          <VerticalForm>
-            <TextField
-              id="password1"
-              type="password"
-              label="New password"
-              className={classes.textField}
-              value={this.state.password1}
-              onChange={this.handleChange('password1')}
-              margin="normal"
-              disabled={resettingPassword}
-              fullWidth
-              error={
+          <TextField
+            id="verificationCode"
+            label="Verification code"
+            className={classes.textField}
+            value={this.state.verificationCode}
+            onChange={this.handleChange('verificationCode')}
+            error={!this.validVerificationCode()}
+            margin="normal"
+            fullWidth
+            type="number"
+            helperText="Verification code was sent to your email address"
+            disabled={resettingPassword}
+            autoFocus
+          />
+
+          <TextField
+            id="password1"
+            type="password"
+            label="New password"
+            className={classes.textField}
+            value={this.state.password1}
+            onChange={this.handleChange('password1')}
+            margin="normal"
+            disabled={resettingPassword}
+            fullWidth
+            error={
                   !this.validPassword1()
                   || !this.validPasswordsMatch()
                   || (!!this.props.resetPasswordError && this.props.resetPasswordError.length !== 0)
                   }
-            />
-            <TextField
-              id="password2"
-              type="password"
-              label="Confirm password"
-              className={classes.textField}
-              value={this.state.password2}
-              onChange={this.handleChange('password2')}
-              margin="normal"
-              disabled={resettingPassword}
-              fullWidth
-              error={
+          />
+
+          <TextField
+            id="password2"
+            type="password"
+            label="Confirm password"
+            className={classes.textField}
+            value={this.state.password2}
+            onChange={this.handleChange('password2')}
+            margin="normal"
+            disabled={resettingPassword}
+            fullWidth
+            error={
                   !this.validPassword2()
                   || !this.validPasswordsMatch()
                   || (!!this.props.resetPasswordError && this.props.resetPasswordError.length !== 0)
                   }
-            />
+          />
 
-            <TextField
-              id="verificationCode"
-              label="Verification code"
-              className={classes.textField}
-              value={this.state.verificationCode}
-              onChange={this.handleChange('verificationCode')}
-              error={!this.validVerificationCode()}
-              margin="normal"
-              fullWidth
-              type="number"
-              helperText="Verification code was sent to your email address"
-              disabled={resettingPassword}
-            />
-          </VerticalForm>
         </CardContent>
         <CardActions>
           <Grid container direction="row" justify="space-around">
