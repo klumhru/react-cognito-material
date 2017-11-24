@@ -28,10 +28,6 @@ class RegistrationForm extends React.Component {
   }
   handleRegister = () => {
     console.log('handleRegister', this.state)
-    const data = {
-      ...this.state,
-      password: this.state.password1,
-    }
   }
   validForm = () => (
     this.state.password1.length !== 0 &&
@@ -58,7 +54,6 @@ class RegistrationForm extends React.Component {
       registered,
       dispatch,
     } = this.props
-    console.log(error.name)
     return (
       <Card className={classes.authForm}>
         <CardHeader
@@ -153,6 +148,7 @@ class RegistrationForm extends React.Component {
 
 RegistrationForm.propTypes = {
   classes: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
   error: PropTypes.object,
   registering: PropTypes.bool,
   registered: PropTypes.bool,
@@ -179,5 +175,5 @@ const mapDispatchToProps = (dispatch, ownProps) => ({ // eslint-disable-line
   dispatch,
 })
 
-const component = withStyles(FormStyle)(RegistrationForm)
+export const component = withStyles(FormStyle)(RegistrationForm)
 export default connect(mapStateToProps, mapDispatchToProps)(component)

@@ -4,4 +4,17 @@ node_js:
 script:
 - npm run build
 - npm test
+<<<<<<< HEAD
 
+=======
+deploy:
+  skip_cleanup: true
+  provider: npm
+  email: klumhru@gmail.com
+  api_key:
+    secure: l7Y0Dqljk6Di8i4036SUYcroTBD7LEToeQILOH8ZITmtxD9GBmJsIXUFsKJ7iViRHdG+cNL9/VvW32dlwEMhH3YL5OzD4tpsQkmuSaQ5lJARFc9FImNMH3OtFtWhDgVhyDjR0orWRE1Hmq5eAv/uCCtXpIWMRWW1Wg8qDuNNTaohX+R3NlIEQbHD/tHQHvh6G50S7X0R6zBHCdGg4j58PQ9tP2ZfrRaRpCJ4yN8xVRhWXM3gD86S5AkMeHSnqVT6AuZeHVn2dmcvTT2jeCT0skOEcuP3Xshc9154bVJJh7h//v9Z4G0yO9kB9/A2BLUYK9Hc1dIDSYQfVTd9WxqUD3SqfHIE+M1Yu6sNwNHsCfD1PobN1OcEgLqucXIxA4/FdIZYevkQYm5QgwBKawLYEhPJMc1xSekTeIa8Igr6JOJsdOI9Q7oZX/DXioFjHszU34k2gxuWtMsReGMDQhyQphpbdDX/x9rum42fpvRv5cZLG3hoHPfdeXQBz10tU3WrVkllU90ZNRaKS3o/ErbR2W9Uq5LKafbbXRAVr2WwSsjtzMJ+za2qH5J20qM8c6rPgb7MbLbIQNMd2iEYDdl334XET3vkJjlsIcD5jFFKKO8lBW4jaMw+HZmN69b+9kvVxExX+79RQT+76jCirT0ftdfJ/lvbGrf7DJnOcEkUKp8=
+  on:
+    # tags: true
+    all_branches: true
+    repo: klumhru/react-cognito-material
+>>>>>>> 56e9b35a59f551fd959f0d612587834206637eb0

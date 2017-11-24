@@ -31,7 +31,7 @@ UserProfileActions.propTypes = {
 UserProfileActions.defaultProps = {
 }
 
-const component = withStyles(FormStyle)(UserProfileActions)
+export const component = withStyles(FormStyle)(UserProfileActions)
 
 const mapDispatchToProps = (dispatch) => ({
   handleSignout: () => dispatch(cognitoSignout(true)),
