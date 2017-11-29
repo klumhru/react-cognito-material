@@ -1,4 +1,4 @@
-import { red } from 'material-ui/colors'
+import { red, green } from 'material-ui/colors'
 
 const FormStyle = (theme) => ({
   root: {
@@ -7,8 +7,8 @@ const FormStyle = (theme) => ({
     paddingLeft: theme.spacing.unit * 2,
     paddingRight: theme.spacing.unit * 2,
   },
-  verifyEmailIcon: {
-    verticalAlign: 'middle',
+  iconAlignBottom: {
+    verticalAlign: 'bottom',
   },
   login: {
     textAlign: 'center',
@@ -83,6 +83,18 @@ const FormStyle = (theme) => ({
   },
   verticalForm: {
     minHeight: theme.spacing.unit * 36,
+  },
+  buttonLoadingWrapper: {
+    margin: theme.spacing.unit,
+    position: 'relative',
+  },
+  buttonProgress: {
+    color: green[500],
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
   },
 })
 

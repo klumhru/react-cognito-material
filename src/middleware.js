@@ -72,6 +72,45 @@ export default (config) => {
         }
         break
       }
+      case actions.COGNITO_RESET_PASSWORD: {
+        if (cognitoUser != null) {
+          const { verificationCode, newPassword } = action
+          cognitoUser.confirmPassword(verificationCode, newPassword, {
+            onSuccess: () => {
+              store.dispatch(actions.cognitoResetPasswordSuccess())
+            },
+            onFailure: (err) => {
+              store.dispatch(actions.cognitoResetPasswordFailure(err))
+            },
+          })
+        } else {
+          // TODO: Offer a solution to restart the reset password flow.
+          // Dispatch RESET_PASSWORD_START?
+          setTimeout(() => {
+            store.dispatch(actions.cognitoResetPasswordRestart())
+          }, 50)
+        }
+        break
+      }
+      case actions.COGNITO_SEND_VERIFICATION_CODE: {
+        const { email } = action
+        cognitoUser = new CognitoUser({ Username: email, Pool: userPool })
+        cognitoUser.forgotPassword({
+          // onSuccess: (result) => {
+          //   console.log(result)
+          //   store.dispatch(actions.cognitoSendVerificationCodeSuccess())
+          //   console.log('wat')
+          // },
+          onFailure: (err) => {
+            console.log(err)
+            store.dispatch(actions.cognitoSendVerificationCodeFailure(err))
+          },
+          inputVerificationCode: () => {
+            store.dispatch(actions.cognitoSendVerificationCodeSuccess())
+          },
+        })
+        break
+      }
       case actions.COGNITO_SIGNOUT: {
         stopRefreshInterval()
         if (cognitoUser != null) {

@@ -33,7 +33,7 @@ class LoginForm extends React.Component {
     this.props.handleLogin(this.state)
   }
   validEmail = () => this.state.email.length === 0 || valid.email(this.state.email)
-  validPassword = () => this.state.password.length === 0 || valid.password(this.state.password1)
+  validPassword = () => this.state.password.length === 0 || valid.password(this.state.password)
   validForm = () => (
     this.validEmail() &&
     this.validPassword() &&
@@ -94,7 +94,7 @@ class LoginForm extends React.Component {
                 </Grid>
               </CardActions>
             </div>
-          :
+            :
             <CardContent>
               <Button color="accent" raised onClick={this.handleSignout}>
               Sign out
