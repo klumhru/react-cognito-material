@@ -1,6 +1,7 @@
 import reducer from './reducers'
 import middleware from './middleware'
 import * as Cognito from './components'
+import withCognito from './withCognito'
 import {
   COGNITO_CONFIGURE,
   COGNITO_SEND_VERIFICATION_CODE,
@@ -92,4 +93,5 @@ export {
   cognitoSignOutSuccess,
   cognitoSignOutFailure,
   cognitoError,
+  withCognito,
 }
