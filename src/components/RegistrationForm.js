@@ -53,9 +53,10 @@ class RegistrationForm extends React.Component {
       registering,
       registered,
       dispatch,
+      className,
     } = this.props
     return (
-      <Card className={classes.authForm}>
+      <Card className={className || classes.authForm}>
         <CardHeader
           title="Registration"
         />
@@ -152,6 +153,7 @@ RegistrationForm.propTypes = {
   error: PropTypes.object,
   registering: PropTypes.bool,
   registered: PropTypes.bool,
+  className: PropTypes.string,
 }
 
 RegistrationForm.defaultProps = {
@@ -162,6 +164,7 @@ RegistrationForm.defaultProps = {
   },
   registering: false,
   registered: false,
+  className: undefined,
 }
 
 const mapStateToProps = (state) => ({

@@ -41,9 +41,9 @@ class LoginForm extends React.Component {
     this.state.email.length !== 0
   )
   render() {
-    const { classes } = this.props
+    const { classes, className } = this.props
     return (
-      <Card className={classes.authForm}>
+      <Card className={className || classes.authForm}>
         <CardHeader
           title="Login"
         />
@@ -115,12 +115,14 @@ LoginForm.propTypes = {
   handleSignout: PropTypes.func.isRequired,
   // dispatch: PropTypes.func,
   error: PropTypes.string.isRequired,
+  className: PropTypes.string,
 }
 
 LoginForm.defaultProps = {
   // dispatch: () => {},
   signedIn: false,
   signingIn: false,
+  className: undefined,
 }
 
 export const component = withStyles(FormStyle)(LoginForm)
