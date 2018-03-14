@@ -32,7 +32,7 @@ class UserProfileForm extends React.Component {
             { userAttributes != null ?
               <CardContent>
                 { userAttributes.map((attribute) =>
-                  <Typography>{ attribute.getValue() }</Typography>)
+                  <Typography key={attribute.getName()}>{ attribute.getValue() }</Typography>)
                 }
               </CardContent>
             :

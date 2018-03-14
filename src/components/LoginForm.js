@@ -53,7 +53,6 @@ class LoginForm extends React.Component {
               <CardContent>
                 <VerticalForm>
                   <TextField
-                    id="email"
                     label="Email"
                     className={classes.textField}
                     value={this.state.email}
@@ -64,7 +63,6 @@ class LoginForm extends React.Component {
                     fullWidth
                   />
                   <TextField
-                    id="password"
                     type="password"
                     label="Password"
                     className={classes.textField}
@@ -80,11 +78,11 @@ class LoginForm extends React.Component {
               </CardContent>
               <CardActions>
                 <Grid container direction="row" justify="space-around">
-                  <Button color="accent" onClick={this.handleForgot}>
+                  <Button color="secondary" onClick={this.handleForgot}>
                   Forgot?
                   </Button>
                   <Button
-                    raised
+                    variant="raised"
                     color="primary"
                     onClick={() => this.handleLogin()}
                     disabled={!this.validForm()}
@@ -96,7 +94,7 @@ class LoginForm extends React.Component {
             </div>
             :
             <CardContent>
-              <Button color="accent" raised onClick={this.handleSignout}>
+              <Button color="secondary" variant="raised" onClick={this.handleSignout}>
               Sign out
               </Button>
             </CardContent>

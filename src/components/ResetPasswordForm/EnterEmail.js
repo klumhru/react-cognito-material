@@ -57,7 +57,7 @@ class EnterEmail extends React.Component {
           <Grid container direction="row" justify="space-around">
             <div className={classes.buttonLoadingWrapper}>
               <Button
-                raised
+                variant="raised"
                 color="primary"
                 onClick={this.handleSendVerificationCode}
                 disabled={sendingVerificationCode || (this.state.email.length === 0 || !this.validEmail())}

@@ -73,7 +73,6 @@ class RegistrationForm extends React.Component {
           <CardContent>
             <VerticalForm>
               <TextField
-                id="name"
                 label="Name"
                 className={classes.textField}
                 value={this.state.name}
@@ -85,7 +84,6 @@ class RegistrationForm extends React.Component {
                 helperText={error.name}
               />
               <TextField
-                id="email"
                 label="Email"
                 className={classes.textField}
                 value={this.state.email}
@@ -97,7 +95,6 @@ class RegistrationForm extends React.Component {
                 helperText={error.email}
               />
               <TextField
-                id="password1"
                 type="password"
                 label="Password"
                 className={classes.textField}
@@ -110,7 +107,6 @@ class RegistrationForm extends React.Component {
                 helperText={error.password}
               />
               <TextField
-                id="password2"
                 type="password"
                 label="Confirm password"
                 className={classes.textField}
@@ -129,7 +125,7 @@ class RegistrationForm extends React.Component {
           <CardActions>
             <Grid container direction="row" justify="space-around">
               <Button
-                raised
+                variant="raised"
                 disabled={
                   !this.validForm() ||
                   registering

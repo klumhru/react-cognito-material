@@ -128,7 +128,7 @@ class EnterNewPassword extends React.Component {
           <Grid container direction="row" justify="space-around">
             <div className={classes.buttonLoadingWrapper}>
               <Button
-                raised
+                variant="raised"
                 color="primary"
                 onClick={this.handleResetPassword}
                 disabled={

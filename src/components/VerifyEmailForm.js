@@ -57,10 +57,10 @@ class VerifyEmailForm extends React.Component {
         </CardContent>
         <CardActions>
           <Grid container direction="row" justify="space-around">
-            <Button color="accent" onClick={this.handleResend}>
+            <Button color="secondary" onClick={this.handleResend}>
               Resend
             </Button>
-            <Button raised color="primary" onClick={this.handleConfirm}>
+            <Button variant="raised" color="primary" onClick={this.handleConfirm}>
               Confirm
             </Button>
           </Grid>

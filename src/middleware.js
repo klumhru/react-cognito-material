@@ -46,6 +46,8 @@ export default (config) => {
               resolve(session)
             }
           })
+        } else {
+          resolve(session)
         }
       })
     })
@@ -170,15 +172,19 @@ export default (config) => {
                 store.dispatch(actions.cognitoError(error))
               } else {
                 putUserAttributes(attributes)
-                cognitoUser.identityId = AWS.config.credentials.params.IdentityId
-                const data = AWS.config.credentials.data.Credentials
-                const creds = {
-                  accessKeyId: data.AccessKeyId,
-                  secretAccessKey: data.SecretAccessKey || data.SecretKey,
-                  sessionToken: data.SessionToken,
-                  expiration: data.Expiration,
+                if (!config.RetrieveCredentials) {
+                  store.dispatch(actions.cognitoLoginSuccess(cognitoUser))
+                } else {
+                  cognitoUser.identityId = AWS.config.credentials.params.IdentityId
+                  const data = AWS.config.credentials.data.Credentials
+                  const creds = {
+                    accessKeyId: data.AccessKeyId,
+                    secretAccessKey: data.SecretAccessKey || data.SecretKey,
+                    sessionToken: data.SessionToken,
+                    expiration: data.Expiration,
+                  }
+                  store.dispatch(actions.cognitoLoginSuccess(cognitoUser, session, creds))
                 }
-                store.dispatch(actions.cognitoLoginSuccess(cognitoUser, session, creds))
               }
             })
           }).catch((err) => {

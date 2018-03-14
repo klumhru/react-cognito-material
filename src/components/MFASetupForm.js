@@ -58,7 +58,7 @@ class MFAConfigForm extends React.Component {
         </CardContent>
         <CardActions>
           <Grid container direction="row" justify="space-around">
-            <Button raised color="primary" onClick={this.handleConfirm}>
+            <Button variant="raised" color="primary" onClick={this.handleConfirm}>
               Confirm
             </Button>
           </Grid>

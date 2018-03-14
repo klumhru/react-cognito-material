@@ -1,8 +1,11 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import { mount } from 'enzyme'
+import { mount, configure } from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16'
 import configureMockStore from 'redux-mock-store'
 import ResetPasswordForm from './'
+
+configure({ adapter: new Adapter() })
 
 describe('<ResetPasswordForm />', () => {
   const div = document.createElement('div')
@@ -58,4 +61,3 @@ describe('<ResetPasswordForm />', () => {
     expect(wrapper.find('EnterEmail').length).toBe(0)
   })
 })
-
